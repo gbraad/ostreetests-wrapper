@@ -1,0 +1,24 @@
+image: docker:git
+services:
+- docker:dind
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+  - git clone https://github.com/giuseppe/ostreetests.git --depth 1 -b master
+
+
+build_centos:
+  script:
+    - docker build -t registry.gitlab.com/gbraad/ostreetests:centos ./ostreetests/centos
+    - docker push registry.gitlab.com/gbraad/ostreetests:centos
+  only:
+    - master
+  when: manual
+
+build_fedora:
+  script:
+    - docker build -t registry.gitlab.com/gbraad/ostreetests:fedora ./ostreetests/fedora
+    - docker push registry.gitlab.com/gbraad/ostreetests:fedora
+  only:
+    - master
+  when: manual
