@@ -5,6 +5,7 @@ services:
 before_script:
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
   - git clone https://github.com/giuseppe/ostreetests.git --depth 1 -b master
+  - git clone https://github.com/gbraad/ostreetests.git mine --depth 1 -b master
 
 
 build_centos:
@@ -22,3 +23,12 @@ build_fedora:
   only:
     - master
   when: manual
+
+build_fedoramine:
+  script:
+    - docker build -t registry.gitlab.com/gbraad/ostreetests:fedoramine ./mine/fedora
+    - docker push registry.gitlab.com/gbraad/ostreetests:fedoramine
+  only:
+    - master
+  when: manual
+
